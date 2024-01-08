@@ -1,7 +1,4 @@
-/** 
- * Prints the calendars of all the years in the 20th century.
- */
-public class Calendar1 {	
+public class Calendar{	
     // Starting the calendar on 1/1/1900
 	static int dayOfMonth = 1;   
 	static int month = 1;
@@ -14,23 +11,33 @@ public class Calendar1 {
 	 * number of Sundays that occured on the first day of the month during this period.
 	 */
 	public static void main(String args[]) {
-		// Advances the date and the day-of-the-week from 1/1/1900 till 31/12/1999, inclusive.
-	    // Prints each date dd/mm/yyyy in a separate line. If the day is a Sunday, prints "Sunday".
-	    // The following variable, used for debugging purposes, counts how many days were advanced so far.
-	    int debugDaysCounter = 37000;
-		int daysCount = 0; 
-		int counter = 0; // Counts the Sundays that are first day of the month
-		while(year < 2000){
+		// Runs over the days until a day before the wanted year
+		int wantedYear = Integer.parseInt(args[0]);
+		while(year < wantedYear){
 			month = 1;
 			while(month < 13){
 				dayOfMonth = 1;
 				while(dayOfMonth <= nDaysInMonth(month, year)){
-					if(daysCount == debugDaysCounter) return; // For testing
+					if(dayOfWeek == 7){
+						dayOfWeek = 1;
+					}
+					else{
+						dayOfWeek++;
+					}
+					dayOfMonth++;
+				}
+				month++;
+			}
+			year++;
+		}
+		//Prints the calendar of the wanted year
+		while(year < wantedYear + 1){
+			month = 1;
+			while(month < 13){
+				dayOfMonth = 1;
+				while(dayOfMonth <= nDaysInMonth(month, year)){
 					if(dayOfWeek == 1){
 						System.out.println(dayOfMonth + "/" + month + "/" + year + " Sunday");
-						if(dayOfWeek == dayOfMonth){
-							counter++;
-						}
 					}
 					else{
 						System.out.println(dayOfMonth + "/" + month + "/" + year);
@@ -42,16 +49,13 @@ public class Calendar1 {
 						dayOfWeek++;
 					}
 					dayOfMonth++;
-					daysCount++;
 				}
 				month++;
 			}
 			year++;
 		}
-		System.out.println("During the 20th century, " + counter + " Sundays fell on the first day of the month");
-	 	//// Write the necessary ending code here
-
-	 }
+		
+	 } 
 	
 	 // Advances the date (day, month, year) and the day-of-the-week.
 	 // If the month changes, sets the number of days in this month.
@@ -84,7 +88,6 @@ public class Calendar1 {
 			}
 			year++;
 		}
-		System.out.println("During the 20th century, " + counter + " Sundays fell on the first day of the month");		
 	 } 
 		 
     
