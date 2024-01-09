@@ -16,6 +16,7 @@ public class LoanCalc {
 		double loan = Double.parseDouble(args[0]);
 		double rate = Double.parseDouble(args[1]);
 		int n = Integer.parseInt(args[2]);
+		int iterationCounter = 0;
 		System.out.println("Loan sum = " + loan + ", interest rate = " + rate + "%, periods = " + n);
 		
 		// Computes the periodical payment using brute force search
@@ -29,7 +30,11 @@ public class LoanCalc {
 		System.out.printf("%.2f", bisectionSolver(loan, rate, n, epsilon));
 		System.out.println();
 		System.out.println("number of iterations: " + iterationCounter);
-		
+		// Side effect: modifies the class variable iterationCounter.
+    
+    
+
+
 	}
 	
 	/**
@@ -40,14 +45,18 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {  
-    	double left = loan;
-		double payment ;
-		while (left > loan){ 
-			payment = endBalance(loan, rate, n, payment) ;
-		    left = left -payment ;
-			if (left == loan + epsilon)
+		
+		double balance = 1;
+		double payment = loan/n ;
+		iterationCounter = 0;
+		while (balance  > 0){
+		    balance = endBalance(loan, rate, n, payment);
+		    payment = payment + epsilon;
+			iterationCounter ++;
 		}
+	
     	return payment;
+		
 	}
     
     /**
@@ -58,8 +67,21 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	// Replace the following statement with your code
-    	return 0;
+    	double h = loan;
+		double l = loan / n;
+		double payment = (l + h) / 2;
+		iterationCounter = 0;
+		while ((h -l) > epsilon) {
+            if (endBalance(loan, rate, n, payment) * endBalance(loan, rate, n, l) > 0){
+				l = payment;
+			}
+			else
+			    h = payment;
+				payment = (l +h) / 2;
+				iterationCounter ++;
+			
+		}
+    	return payment;
     }
 	
 	/**
@@ -69,8 +91,9 @@ public class LoanCalc {
 	private static double endBalance(double loan, double rate, int n, double payment) {
 		double balance = loan;
 		for (int i = 0; i < n; i++){
-           balance = (loan - payment)*(1+ rate/100);
+           balance = (balance - payment)*(1+ rate/100);
 		}
+	
     	return balance;
 	}
 }
